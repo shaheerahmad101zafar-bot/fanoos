@@ -1,26 +1,437 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #120e0a;
+  --bark: #1c1610;
+  --panel: #2a2118;
+  --line: rgba(232, 210, 170, 0.16);
+  --parchment: #f4ebe0;
+  --cream: #fbf7f1;
+  --ember: #e24a16;
+  --flame: #f4a261;
+  --gold: #d4b36a;
+  --moss: #3f6f52;
+  --rose: #c23b3b;
+  --muted: #8a7a68;
+  --shadow: 0 24px 60px rgba(18, 14, 10, 0.28);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-outfit);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-bark: var(--bark);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-parchment: var(--parchment);
+  --color-cream: var(--cream);
+  --color-ember: var(--ember);
+  --color-flame: var(--flame);
+  --color-gold: var(--gold);
+  --color-moss: var(--moss);
+  --color-rose: var(--rose);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-fraunces);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html.standalone body {
+  overscroll-behavior-y: contain;
+}
+
+#fanoos-print-overlay {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: auto;
+    margin: 6mm;
+  }
+
+  html.is-printing-image,
+  html.is-printing-image body {
+    background: #fff !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  html.is-printing-image body > *:not(#fanoos-print-overlay) {
+    display: none !important;
+  }
+
+  html.is-printing-image #fanoos-print-overlay {
+    display: block !important;
+    position: static !important;
+    background: #fff !important;
+  }
+
+  html.is-printing-image #fanoos-print-overlay img {
+    display: block !important;
+    width: 80mm !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
   }
 }
 
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-sans), sans-serif;
+}
+
+h1,
+h2,
+h3,
+.display {
+  font-family: var(--font-display), serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: #f4a26166;
+}
+
+.lantern-glow {
+  background: radial-gradient(circle at 50% 40%, rgba(244, 162, 97, 0.45), transparent 55%),
+    radial-gradient(circle at 50% 70%, rgba(226, 74, 22, 0.2), transparent 50%);
+  animation: pulse-glow 3.6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise 0.55s ease both;
+}
+
+.rise-delay-1 {
+  animation-delay: 0.08s;
+}
+.rise-delay-2 {
+  animation-delay: 0.16s;
+}
+.rise-delay-3 {
+  animation-delay: 0.24s;
+}
+
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-120px) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(18px, -22px);
+  }
+}
+
+@keyframes chart-draw {
+  from {
+    stroke-dashoffset: 420;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), rgba(244, 162, 97, 0.18));
+  animation: float-up 9s ease-in-out infinite;
+}
+
+.draw-line {
+  stroke-dasharray: 420;
+  animation: chart-draw 2.8s ease forwards;
+}
+
+.invoice-slip-preview {
+  animation: rise 0.7s ease both;
+}
+
+article.invoice-slip {
+  color: #120e0a !important;
+  background-color: #ffffff !important;
+  border-color: rgba(18, 14, 10, 0.08) !important;
+  box-shadow: none !important;
+}
+
+article.invoice-slip .text-muted {
+  color: #8a7a68 !important;
+}
+
+article.invoice-slip .text-ember {
+  color: #e24a16 !important;
+}
+
+article.invoice-slip .bg-parchment\/80,
+article.invoice-slip [class*="bg-parchment"] {
+  background-color: #f4ebe0 !important;
+}
+
+article.invoice-slip [class*="border-black"] {
+  border-color: rgba(18, 14, 10, 0.12) !important;
+}
+
+article.invoice-slip.is-thermal-print {
+  --thermal-width: 576px;
+  width: var(--thermal-width) !important;
+  max-width: var(--thermal-width) !important;
+  padding: 4px 8px 6px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+}
+
+article.invoice-slip.is-thermal-print * {
+  letter-spacing: 0 !important;
+  box-shadow: none !important;
+}
+
+article.invoice-slip.is-thermal-print h2,
+article.invoice-slip.is-thermal-print .text-3xl {
+  font-size: 16px !important;
+  line-height: 1.1 !important;
+  margin: 0 0 2px !important;
+}
+
+article.invoice-slip.is-thermal-print .text-2xl {
+  font-size: 15px !important;
+  margin-top: 3px !important;
+}
+
+article.invoice-slip.is-thermal-print .text-sm {
+  font-size: 11px !important;
+}
+
+article.invoice-slip.is-thermal-print .text-xs,
+article.invoice-slip.is-thermal-print .text-\[11px\],
+article.invoice-slip.is-thermal-print .text-\[10px\] {
+  font-size: 10px !important;
+  line-height: 1.15 !important;
+}
+
+article.invoice-slip.is-thermal-print p {
+  margin: 0 !important;
+}
+
+article.invoice-slip.is-thermal-print .invoice-logo {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 auto 3px !important;
+  border-radius: 6px !important;
+}
+
+article.invoice-slip.is-thermal-print canvas {
+  width: 88px !important;
+  height: 88px !important;
+}
+
+article.invoice-slip.is-thermal-print .my-4 {
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+
+article.invoice-slip.is-thermal-print .mt-5 {
+  margin-top: 6px !important;
+}
+
+article.invoice-slip.is-thermal-print .mt-4 {
+  margin-top: 4px !important;
+}
+
+article.invoice-slip.is-thermal-print .mt-2 {
+  margin-top: 1px !important;
+}
+
+article.invoice-slip.is-thermal-print .mt-1 {
+  margin-top: 0 !important;
+}
+
+article.invoice-slip.is-thermal-print .mb-3 {
+  margin-bottom: 2px !important;
+}
+
+article.invoice-slip.is-thermal-print .py-1\.5,
+article.invoice-slip.is-thermal-print td {
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+}
+
+article.invoice-slip.is-thermal-print th {
+  padding-bottom: 2px !important;
+}
+
+article.invoice-slip.is-thermal-print .leading-5,
+article.invoice-slip.is-thermal-print .leading-none {
+  line-height: 1.15 !important;
+}
+
+article.invoice-slip.is-thermal-print .tracking-\[0\.16em\] {
+  letter-spacing: 0.03em !important;
+}
+
+article.invoice-slip.is-thermal-print .gap-1,
+article.invoice-slip.is-thermal-print .gap-2 {
+  gap: 1px !important;
+}
+
+article.invoice-slip.is-thermal-print .gap-y-1 {
+  row-gap: 0 !important;
+}
+
+article.invoice-slip.is-thermal-print .rounded-2xl {
+  border-radius: 4px !important;
+  padding: 3px 5px !important;
+  margin-top: 4px !important;
+}
+
+.invoice-print-clone {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: auto;
+    margin: 8mm;
+  }
+
+  html.is-printing,
+  html.is-printing body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #120e0a !important;
+  }
+
+  html.is-printing body > *:not(.invoice-print-clone) {
+    display: none !important;
+  }
+
+  html.is-printing .invoice-print-clone,
+  html.is-printing .invoice-print-clone * {
+    visibility: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html.is-printing .invoice-print-clone {
+    display: block !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: 80mm !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+  }
+
+  html.is-printing .invoice-print-clone table {
+    width: 100% !important;
+  }
+
+  html.is-printing .invoice-print-clone img,
+  html.is-printing .invoice-print-clone .invoice-logo {
+    display: block !important;
+    max-height: 80px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgba(212, 179, 106, 0.35);
+  border-radius: 99px;
 }

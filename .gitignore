@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+*.keystore
 
 # debug
 npm-debug.log*
@@ -32,6 +33,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +41,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# android apk build
+android-app/.gradle/
+android-app/build/
+android-app/app/build/
+android-app/local.properties
+android-app/.idea/
+android-app/manual-build/
+
+# local ledger
+/data/*.db
+/data/*.db-*
