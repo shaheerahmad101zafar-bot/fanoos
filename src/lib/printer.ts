@@ -19,7 +19,8 @@ const DEFAULT_PRINTER: PrinterConfig = {
   bluetoothAddress: "",
 };
 
-export const FANOOS_APP_APK = "https://fanoos-bice.vercel.app/download.html";
+export const FANOOS_APP_APK =
+  "https://github.com/shaheerahmad101zafar-bot/fanoos/releases/download/v1.5/fanoos.apk";
 
 export function loadPrinter(): PrinterConfig {
   if (typeof window === "undefined") return { ...DEFAULT_PRINTER };
