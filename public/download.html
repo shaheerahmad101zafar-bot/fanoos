@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
-    <title>Fanoos app download</title>
+    <title>Usman Shop app download</title>
     <style>
       body {
         margin: 0;
@@ -27,8 +27,7 @@
         line-height: 1.5;
         margin: 0 0 12px;
       }
-      button,
-      a.btn {
+      a {
         display: block;
         width: 100%;
         box-sizing: border-box;
@@ -39,122 +38,23 @@
         padding: 16px 22px;
         border-radius: 999px;
         text-align: center;
-        border: 0;
         margin: 0 0 10px;
         font-size: 1rem;
       }
-      button.alt,
       a.alt {
         background: #fff;
         color: #120e0a;
         border: 1px solid rgba(18, 14, 10, 0.15);
       }
-      .ok {
-        color: #3f6f52;
-        font-weight: 700;
-      }
-      .warn {
-        color: #c23b3b;
-        font-weight: 700;
-      }
     </style>
   </head>
   <body>
     <div class="box">
-      <h1>Fanoos app</h1>
-      <p id="hint">Download taiyar ho raha hai…</p>
-      <button type="button" id="dl">ZIP download — yeh dabao</button>
-      <button type="button" id="chrome" class="alt">Chrome browser mein kholo</button>
-      <button type="button" id="copy" class="alt">Link copy karo</button>
-      <p>
-        APK seedha mat download karo — Infinix/Chrome usay atka deta hai. ZIP aaye, usay kholo, phir
-        <b>fanoos.apk</b> install karo.
-      </p>
-      <p id="status"></p>
+      <h1>Usman Shop app</h1>
+      <p>Chrome browser mein kholo. Pehle Downloads mein jo file ruki ho usay cancel/delete karo.</p>
+      <a href="https://github.com/shaheerahmad101zafar-bot/fanoos/releases/download/v1.5/fanoos.apk">APK download</a>
+      <a class="alt" href="https://github.com/shaheerahmad101zafar-bot/fanoos/releases/download/v1.5/fanoos-printer.zip">ZIP download</a>
+      <p>Agar APK atak jaye to ZIP lo, usay kholo, phir <b>fanoos.apk</b> install karo.</p>
     </div>
-    <script>
-      var ZIP = "/fanoos-printer.zip?v=15";
-      var PAGE = "https://fanoos-bice.vercel.app/download.html";
-      var CHROME =
-        "intent://fanoos-bice.vercel.app/download.html#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https://fanoos-bice.vercel.app/download.html;end";
-      var ua = navigator.userAgent || "";
-      var inApp = /FanoosApp\//i.test(ua) || /; wv\)/i.test(ua);
-
-      function setStatus(text, ok) {
-        var el = document.getElementById("status");
-        el.className = ok ? "ok" : "warn";
-        el.textContent = text;
-      }
-
-      async function clearWorkers() {
-        try {
-          if (navigator.serviceWorker) {
-            var regs = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(regs.map(function (r) { return r.unregister(); }));
-          }
-          if (window.caches) {
-            var keys = await caches.keys();
-            await Promise.all(keys.map(function (k) { return caches.delete(k); }));
-          }
-        } catch (e) {}
-      }
-
-      (async function start() {
-        var had = false;
-        try {
-          if (navigator.serviceWorker) {
-            had = (await navigator.serviceWorker.getRegistrations()).length > 0;
-          }
-        } catch (e) {}
-        await clearWorkers();
-        if (had && !sessionStorage.getItem("fanoos-sw-cleared")) {
-          sessionStorage.setItem("fanoos-sw-cleared", "1");
-          location.reload();
-          return;
-        }
-        document.getElementById("hint").textContent = inApp
-          ? "Fanoos app ke andar download atak jata hai. Pehle Chrome mein kholo, phir ZIP lo."
-          : "Pehle Downloads mein jo file ruki ho usay cancel/delete karo. Phir ZIP download dabao.";
-      })();
-
-      document.getElementById("dl").onclick = async function () {
-        if (inApp) {
-          location.href = CHROME;
-          setStatus("Chrome kholo, phir yahan ZIP dabao.", false);
-          return;
-        }
-        setStatus("ZIP aa rahi hai…", true);
-        await clearWorkers();
-        try {
-          var res = await fetch(ZIP, { cache: "no-store" });
-          if (!res.ok) throw new Error("fail");
-          var blob = await res.blob();
-          var url = URL.createObjectURL(blob);
-          var a = document.createElement("a");
-          a.href = url;
-          a.download = "fanoos-printer.zip";
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-          setStatus("ZIP Downloads mein check karo. Usay khol ke fanoos.apk install karo.", true);
-        } catch (e) {
-          location.href = ZIP;
-        }
-      };
-
-      document.getElementById("chrome").onclick = function () {
-        location.href = CHROME;
-      };
-
-      document.getElementById("copy").onclick = async function () {
-        try {
-          await navigator.clipboard.writeText(PAGE);
-          setStatus("Link copy ho gaya. Chrome address bar mein paste karo.", true);
-        } catch (e) {
-          prompt("Copy:", PAGE);
-        }
-      };
-    </script>
   </body>
 </html>
